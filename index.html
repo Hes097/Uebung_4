@@ -2,31 +2,28 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Leaflet Map</title>
     <style> 
         body {
             margin: 0;
             padding: 0;
         } 
+
         #map {
             max-width: 100%;
-            height: 85vh;
+            height: 80vh;
         }
+            
+    @media only screen and (max-width: 620px) {
+      /* For mobile phones: */
+      .menu, .main, .right {
+        width: 100%;
+      }
+    }
 
-
-
-@media only screen and (max-width: 620px) {
-  /* For mobile phones: */
-  .menu, .main, .right {
-    width: 100%;
-  }
-}
-
-
-    
     </style>
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
@@ -34,8 +31,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="route.js" defer></script>
-    <script src="leaflet.js" defer></script>
-    <script src="WeatherPopUp2.js" defer></script>
+    <script src="leafletVAR2.js" defer></script>
+    <script src="WeatherPopUp.js" defer></script>
     <script src="openWeatherAPIKey.js" defer></script>
 
 
@@ -56,22 +53,22 @@
               <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="#home">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
+                    <a class="nav-link" href="https://www.uni-muenster.de/Geoinformatics/">Institut</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">FAQ</a>
+                    <a class="nav-link" href="https://de.wikipedia.org/wiki/Hreflang">FAQ</a>
                   </li>
                   <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Fun Stuff
+                    <a class="nav-link dropdown-toggle" href="#dropdownmenu" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      More
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Another action</a></li>
-                      <li><a class="dropdown-item" href="#">Wohoo! Something else</a></li>
+                      <li><a class="dropdown-item" href="mailto:antonia.jost@uni.muenster.de">Contact Antonia</a></li>
+                      <li><a class="dropdown-item" href="mailto:henning.sander@uni-muenster.de">Contact Henning</a></li>
+                      <li><a class="dropdown-item" href="javascript:alert('Surprise! :D ');">FUN FUN FUN</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -80,7 +77,7 @@
                 <span class="navbar-toggler-icon"></span>
               </button>
               <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" >
+                <input class="form-control me-2" type="search" placeholder="Search (in progress)" aria-label="Search" >
                 <button class="btn btn-outline-primary" type="submit">Search</button>
               </form>
             </div>
@@ -89,8 +86,10 @@
       </header>
 
 
-    <main class="content">
-        <div id ="map" ></div>
+    <main class="map-display">
+        <div id ="map" style="width: 800px; margin-left: auto; margin-right: auto;" ></div>
+        <div class="container-fluid"></div>
+        <p style="text-align: center;"></p>
 
         <div class="container px-4 py-5" id="Input">
             <h2 class="pb-2 border-bottom">Interesting Information</h2>
@@ -99,7 +98,7 @@
               <div class="col">
                 <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('Bild1.jpg');">
                   <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-                    <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Unbelievably <br> stunning <br> text.</h2>
+                    <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Unbelievably stunning text.</h2>
                     <ul class="d-flex list-unstyled mt-auto">
                       <li class="me-auto">
                         <img src="HS.jpg" class="rounded-circle border border-white" width="32" height="32">
@@ -125,7 +124,7 @@
               <div class="col">
                 <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('Bild3.jpg');">
                   <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
-                    <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Spectecular click-bait title!</h2>
+                    <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Spectacular click-bait title!</h2>
                     <ul class="d-flex list-unstyled mt-auto">
                       <li class="me-auto">
                         <img src="HS.jpg" class="rounded-circle border border-white" width="32" height="32">
@@ -143,7 +142,7 @@
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container">
             <span class="text-muted">Imprint: Henning Sander | Cheruskerring 35, 48147 Münster Germany |
-                henning.sander@uni-muenster.de </span>
+              henning.sander@uni-muenster.de</span>
         </div>
     </footer>
       
